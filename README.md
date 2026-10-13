@@ -1,156 +1,103 @@
-# AyuGram
+<p align="center">
+  <img src=".github/FlyGram.png" width="160" height="160" alt="FlyGram Logo" />
+</p>
 
-![AyuGram Logo](.github/AyuGram.png) ![AyuChan](.github/AyuChan.png)
+<h1 align="center">FlyGram Desktop</h1>
 
-[ English  |   [Русский](README-RU.md) ]
+<p align="center">
+  <b>Next-generation Telegram desktop client designed for ultimate privacy, freedom, and performance.</b>
+</p>
 
-## Features
+<p align="center">
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop/releases"><img src="https://img.shields.io/badge/Release-v7.3.0-3b82f6?style=for-the-badge&logo=github" alt="Release" /></a>
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop/blob/dev/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-10b981?style=for-the-badge" alt="License" /></a>
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop"><img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-6366f1?style=for-the-badge" alt="Platforms" /></a>
+</p>
 
-- Full ghost mode (flexible)
-- Messages history
-- Anti-recall
-- Font customization
-- Streamer mode
-- Local Telegram Premium
-- Translator
-- Media preview & quick reaction on force click (macOS)
-- Enhanced appearance
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-downloads">Downloads</a> •
+  <a href="#-building-from-source">Building</a> •
+  <a href="README-RU.md">Русский язык 🇷🇺</a>
+</p>
 
-And many more. Check out our [Documentation](https://docs.ayugram.one/desktop/).
+---
 
-<h3>
-  <details>
-    <summary>Preview</summary>
-    <table>
-      <tr>
-        <td><img src='.github/demos/demo1.png' width='268' alt='Preferences'></td>
-        <td><img src='.github/demos/demo2.png' width='268' alt='AyuGram Options'></td>
-        <td><img src='.github/demos/demo3.png' width='268' alt='Message Filters'></td>
-      </tr>
-      <tr>
-        <td><img src='.github/demos/demo4.png' width='268' alt='Appearance'></td>
-        <td><img src='.github/demos/demo5.png' width='268' alt='Chats'></td>
-      </tr>
-    </table>
-  </details>
-</h3>
+## ✨ Features
 
-## Downloads
+### ⚡ Power, Freedom & Productivity
+* **🚀 Unlimited Accounts**: Connect as many accounts as you need (up to 10,000) with unconditional multi-account switching.
+* **📌 Unlimited Folder Pins**: Bypass artificial pinning limitations and keep all your critical channels organized.
+* **🧹 Archive Cleaner**: Clean folder tabs from archived conversations in 1 click (both client-side filter and cloud sync).
+* **📊 Live Speed Indicator**: Real-time bandwidth transfer rate measurement ($\Delta\text{bytes} / \Delta\text{time}$) for file downloads, uploads, and media streaming.
+* **🏷️ Private Notes & Tags**: Add custom tags (`[VIP]`, `[Client]`, `[Project]`) and notes to any peer or channel, stored securely and strictly locally.
 
-### Windows
+### 👻 Stealth & Ghost Mode
+* **Ghost Reading**: View incoming chat messages without dispatching read receipts.
+* **Ghost Stories**: Watch Telegram Stories anonymously without notifying the author.
+* **Typing Mask**: Completely hide "typing...", recording voice, or uploading document activities.
+* **Offline Dispatch**: Send messages while keeping your status offline.
 
-#### Official
+### 🛡️ Anti-Recall & Local Archive
+* **Anti-Delete Protection**: Retain deleted messages even if the author deletes them for everyone.
+* **Message Edit History**: View revisions and edits of modified messages with exact timestamps.
+* **Local Database**: Indexed local SQLite database preserves important records on your own hardware.
 
-You can download prebuilt Windows binary from [Releases tab](https://github.com/AyuGram/AyuGramDesktop/releases) or from
-the [Telegram channel](https://t.me/AyuGramReleases).
+### 💎 Interface & Privacy
+* **Local Telegram Premium**: Unlocked doubled limits in UI, emoji statuses, and custom reactions locally.
+* **Streamer Mode**: Hide phone numbers, user IDs, and private info for safe screen sharing and streaming.
+* **Integrated Translator**: Fast translation of foreign messages using popular translation engines.
+* **Custom Appearance**: Custom font rendering, tailored icons, modern dark styling, and glassmorphism themes.
 
-#### Winget
+---
 
-```bash
-winget install RadolynLabs.AyuGramDesktop
-```
+## 📸 Preview
 
-#### Scoop
+<details open>
+  <summary><b>Click to toggle interface showcase</b></summary>
+  <br/>
+  <table>
+    <tr>
+      <td><img src='.github/demos/demo1.png' width='280' alt='Preferences'></td>
+      <td><img src='.github/demos/demo2.png' width='280' alt='Options'></td>
+      <td><img src='.github/demos/demo3.png' width='280' alt='Filters'></td>
+    </tr>
+    <tr>
+      <td><img src='.github/demos/demo4.png' width='280' alt='Appearance'></td>
+      <td><img src='.github/demos/demo5.png' width='280' alt='Chats'></td>
+      <td><img src='.github/FlyGram.png' width='280' alt='Emblem'></td>
+    </tr>
+  </table>
+</details>
 
-```bash
-scoop bucket add extras
-scoop install ayugram
-```
+---
 
-#### Self-built
+## 📥 Downloads
 
-Follow [official guide](https://github.com/AyuGram/AyuGramDesktop/blob/dev/docs/building-win-x64.md) if you want to
-build by yourself.
+### Windows (64-bit)
+* Download the portable binary from the **[Releases Tab](https://github.com/inthethirtynine-beep/ayudesktop/releases)**.
+* Simply unpack and run `FlyGram.exe` without installation.
 
-### macOS
+### Linux & macOS
+* Build instructions and portable packages are available in the [docs](docs/) directory.
 
-#### Official
+---
 
-You can download prebuilt macOS package from [Releases tab](https://github.com/AyuGram/AyuGramDesktop/releases).
+## 🛠️ Building From Source
 
-#### Homebrew
+Refer to the official building documentation for step-by-step instructions:
+* [Windows 64-bit Build Guide](docs/building-win.md)
+* [Linux Build Guide](docs/building-linux.md)
+* [macOS Build Guide](docs/building-mac.md)
 
-```bash
-brew install --cask ayugram
-```
+---
 
-### Arch Linux
+## 📜 Credits & Acknowledgments
 
-#### From source (recommended)
+FlyGram Desktop is built upon and inspired by:
+* [Telegram Desktop](https://github.com/telegramdesktop/tdesktop)
+* [AyuGram Desktop](https://github.com/AyuGram/AyuGramDesktop)
+* [Kotatogram](https://github.com/kotatogram/kotatogram-desktop)
+* [64Gram](https://github.com/TDesktop-x64/tdesktop)
 
-Install `ayugram-desktop` from [AUR](https://aur.archlinux.org/packages/ayugram-desktop).
-
-#### Prebuilt binaries
-
-Install `ayugram-desktop-bin` from [AUR](https://aur.archlinux.org/packages/ayugram-desktop-bin).
-
-Note: these binaries aren't officially maintained by us.
-
-### NixOS
-
-#### Flake (recommended)
-
-Install `ayugram-desktop` from [ndfined-crp/ayugram-desktop](https://github.com/ndfined-crp/ayugram-desktop)
-
-#### Nixpkgs
-
-Install `ayugram-desktop` from [nixpkgs](https://search.nixos.org/packages?channel=unstable&show=ayugram-desktop)
-
-### ALT Linux
-
-[Sisyphus](https://packages.altlinux.org/en/sisyphus/srpms/ayugram-desktop/)
-
-### Gentoo Linux
-
-See [this repository](https://codeberg.org/OverLessArtem/ayugram-ebuild-gentoo) for installation manual.
-
-### Void Linux
-See [this repository](https://codeberg.org/OverLessArtem/ayugram-template-void) for installation manual.
-
-### EPM
-
-`epm play ayugram`
-
-### Fedora
-
-From [RPM Fusion](https://admin.rpmfusion.org/pkgdb/package/free/ayugram-desktop/) repository.
-
-```bash
-dnf install ayugram-desktop
-```
-
-### Any other Linux distro
-
-Flatpak: https://github.com/0FL01/AyuGramDesktop-flatpak
-
-Or follow the [official guide](https://github.com/AyuGram/AyuGramDesktop/blob/dev/docs/building-linux.md).
-
-## Donation
-
-Enjoy using **AyuGram**? Consider sending us a tip!
-
-[Here's available methods.](https://docs.ayugram.one/donate/)
-
-## Credits
-
-### Telegram clients
-
-- [Telegram Desktop](https://github.com/telegramdesktop/tdesktop)
-- [Kotatogram](https://github.com/kotatogram/kotatogram-desktop)
-- [64Gram](https://github.com/TDesktop-x64/tdesktop)
-- [Forkgram](https://github.com/forkgram/tdesktop)
-
-### Libraries used
-
-- [JSON for Modern C++](https://github.com/nlohmann/json)
-- [SQLite](https://github.com/sqlite/sqlite)
-- [sqlite_orm](https://github.com/fnc12/sqlite_orm)
-- [androidx sources](https://github.com/androidx/androidx)
-
-### Icons
-
-- [Solar Icon Set](https://www.figma.com/community/file/1166831539721848736)
-
-### Bots
-
-- [TelegramDB](https://t.me/tgdatabase) for username lookup by ID (until closing free inline mode at 2 April 2026)
+Licensed under the **[GNU General Public License v3.0](LICENSE)**.

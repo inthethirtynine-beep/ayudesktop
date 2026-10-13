@@ -1,154 +1,103 @@
-# AyuGram
+<p align="center">
+  <img src=".github/FlyGram.png" width="160" height="160" alt="Логотип FlyGram" />
+</p>
 
-![AyuGram Лого](.github/AyuGram.png) ![AyuChan](.github/AyuChan.png)
+<h1 align="center">FlyGram Desktop</h1>
 
-[ [English](README.md)  | Русский ]
+<p align="center">
+  <b>Кастомный клиент Telegram нового поколения: максимальная приватность, свобода и производительность.</b>
+</p>
 
-## Функции и Фишки
+<p align="center">
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop/releases"><img src="https://img.shields.io/badge/Релиз-v7.3.0-3b82f6?style=for-the-badge&logo=github" alt="Релиз" /></a>
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop/blob/dev/LICENSE"><img src="https://img.shields.io/badge/Лицензия-GPL--3.0-10b981?style=for-the-badge" alt="Лицензия" /></a>
+  <a href="https://github.com/inthethirtynine-beep/ayudesktop"><img src="https://img.shields.io/badge/Платформы-Windows%20%7C%20Linux%20%7C%20macOS-6366f1?style=for-the-badge" alt="Платформы" /></a>
+</p>
 
-- Полный режим призрака (настраиваемый)
-- История удалений и изменений сообщений
-- Кастомизация шрифта
-- Режим Стримера
-- Локальный телеграм премиум
-- Переводчик
-- Превью медиа и быстрая реакция при сильном нажатии на тачпад (macOS)
-- Улучшенный вид
+<p align="center">
+  <a href="#-функции-и-возможности">Функции</a> •
+  <a href="#-скачать">Скачать</a> •
+  <a href="#-сборка-из-исходников">Сборка</a> •
+  <a href="README.md">English Version 🇬🇧</a>
+</p>
 
-И многое другое. Посмотрите нашу [Документацию](https://docs.ayugram.one/desktop/) для более подробной информации.
+---
 
-<h3>
-  <details>
-    <summary>Превью</summary>
-    <table>
-      <tr>
-        <td><img src='.github/demos/demo1.png' width='268' alt='Preferences'></td>
-        <td><img src='.github/demos/demo2.png' width='268' alt='AyuGram Options'></td>
-        <td><img src='.github/demos/demo3.png' width='268' alt='Message Filters'></td>
-      </tr>
-      <tr>
-        <td><img src='.github/demos/demo4.png' width='268' alt='Appearance'></td>
-        <td><img src='.github/demos/demo5.png' width='268' alt='Chats'></td>
-      </tr>
-    </table>
-  </details>
-</h3>
+## ✨ Функции и возможности
 
-## Установка
+### ⚡ Свобода, безлимиты и продуктивность
+* **🚀 Безлимитные аккаунты**: Подключайте неограниченное число рабочих профилей (до 10 000 аккаунтов) без искусственных ограничений Telegram Premium.
+* **📌 Безлимитный пин чатов**: Закрепляйте любое количество важных каналов и диалогов внутри пользовательских папок.
+* **🧹 Очистка папок от архивов**: Быстрое исключение архивных чатов из всех папок в один клик (динамическая локальная фильтрация и облачная синхронизация).
+* **📊 Индикатор скорости передачи**: Динамический счётчик скорости загрузки и отдачи файлов в реальном времени (`MB/s`, `KB/s`) во всех сообщениях, медиапросмотрщике и панели загрузок.
+* **🏷️ Локальные заметки и теги к чатам**: Прикрепляйте персональные цветные теги (`[Клиент]`, `[Работа]`, `[Семья]`) и заметки к профилям и каналам. Все данные хранятся строго локально на вашем ПК.
 
-### Windows
+### 👻 Режим невидимки (Ghost Mode)
+* **Чтение без отметок**: Читайте входящие сообщения в диалогах, группах и каналах без отправки галочек прочтения.
+* **Фантомный просмотр историй**: Просматривайте Stories собеседников анонимно.
+* **Скрытие набора текста**: Полное отключение статусов «печатает...», записи голосовых и отправки медиа.
+* **Маскировка онлайна**: Отправка сообщений без раскрытия вашего сетевого статуса онлайн.
 
-#### Официальная версия
+### 🛡️ Локальная история и защита от удаления (Anti-Recall)
+* **Анти-удаление**: Сохраняйте сообщения даже в том случае, если собеседник удалил их «для всех».
+* **История изменений**: Просматривайте исходный текст и все промежуточные редакции отредактированных сообщений с точными таймстемпами.
+* **Локальная база данных SQLite**: Полный архив сообщений остаётся под вашим полным контролем.
 
-Вы можете скачать готовый бинарный файл со вкладки [Releases](https://github.com/AyuGram/AyuGramDesktop/releases) или из
-[Телеграм канала](https://t.me/AyuGramReleases).
+### 💎 Интерфейс и безопасность
+* **Локальный Telegram Premium**: Эмуляция клиентских Premium-функций (удвоенные лимиты в интерфейсе, эмодзи-статусы и кастомные реакции).
+* **Режим стримера (Streamer Mode)**: Быстрое скрытие номеров телефонов, ID и личных данных для безопасных демонстраций экрана.
+* **Встроенный переводчик**: Мгновенный перевод сообщений прямо в чате с поддержкой популярных движков.
+* **Гибкая кастомизация оформления**: Кастомные шрифты, выбор иконки приложения и современные темы.
 
-#### Winget
+---
 
-```bash
-winget install RadolynLabs.AyuGramDesktop
-```
+## 📸 Превью интерфейса
 
-#### Scoop
+<details open>
+  <summary><b>Нажмите, чтобы развернуть скриншоты</b></summary>
+  <br/>
+  <table>
+    <tr>
+      <td><img src='.github/demos/demo1.png' width='280' alt='Настройки'></td>
+      <td><img src='.github/demos/demo2.png' width='280' alt='Опции'></td>
+      <td><img src='.github/demos/demo3.png' width='280' alt='Фильтры'></td>
+    </tr>
+    <tr>
+      <td><img src='.github/demos/demo4.png' width='280' alt='Внешний вид'></td>
+      <td><img src='.github/demos/demo5.png' width='280' alt='Чаты'></td>
+      <td><img src='.github/FlyGram.png' width='280' alt='Эмблема'></td>
+    </tr>
+  </table>
+</details>
 
-```bash
-scoop bucket add extras
-scoop install ayugram
-```
+---
 
-#### Сборка вручную
+## 📥 Скачать
 
-Следуйте [официальному руководству](https://github.com/AyuGram/AyuGramDesktop/blob/dev/docs/building-win-x64.md), если
-вы хотите собрать AyuGram сами.
+### Windows (64-bit)
+* Скачайте готовый архив со страницы **[Релизов GitHub](https://github.com/inthethirtynine-beep/ayudesktop/releases)**.
+* Распакуйте и запустите `FlyGram.exe` (портативная версия не требует установки).
 
-### macOS
+### Linux и macOS
+* Сборка и инструкции по запуску доступны в каталоге [docs/](docs/).
 
-#### Официальная версия
+---
 
-Вы можете скачать подписанный пакет со вкладки [Releases](https://github.com/AyuGram/AyuGramDesktop/releases).
+## 🛠️ Сборка из исходников
 
-#### Homebrew
+Руководства по компиляции клиента для разработчиков:
+* [Инструкция по сборке для Windows 64-bit](docs/building-win.md)
+* [Инструкция по сборке для Linux](docs/building-linux.md)
+* [Инструкция по сборке для macOS](docs/building-mac.md)
 
-```bash
-brew install --cask ayugram
-```
+---
 
-### Arch Linux
+## 📜 Благодарности и лицензия
 
-#### Из исходников (рекомендованный способ)
+Проект FlyGram Desktop основан на исходном коде:
+* [Telegram Desktop](https://github.com/telegramdesktop/tdesktop)
+* [AyuGram Desktop](https://github.com/AyuGram/AyuGramDesktop)
+* [Kotatogram](https://github.com/kotatogram/kotatogram-desktop)
+* [64Gram](https://github.com/TDesktop-x64/tdesktop)
 
-Установите `ayugram-desktop` из [AUR](https://aur.archlinux.org/packages/ayugram-desktop).
-
-#### Готовые бинарники
-
-Установите `ayugram-desktop-bin` из [AUR](https://aur.archlinux.org/packages/ayugram-desktop-bin).
-
-Примечание: данный пакет собирается не нами.
-
-### NixOS
-
-#### Флейк (рекомендуется)
-
-Установите `ayugram-desktop` из [ndfined-crp/ayugram-desktop](https://github.com/ndfined-crp/ayugram-desktop)
-
-#### Nixpkgs
-
-Установите `ayugram-desktop` из [nixpkgs](https://search.nixos.org/packages?channel=unstable&show=ayugram-desktop)
-
-### ALT Linux
-
-[Sisyphus](https://packages.altlinux.org/en/sisyphus/srpms/ayugram-desktop/)
-
-### Gentoo Linux
-
-Инструкцию по установке можно найти в [этом репозитории](https://codeberg.org/OverLessArtem/ayugram-ebuild-gentoo).
-
-### Void Linux
-Инструкцию по установке можно найти в [этом репозитории](https://codeberg.org/OverLessArtem/ayugram-template-void)
-
-### EPM
-
-`epm play ayugram`
-
-### Fedora
-
-Из репозитория [RPM Fusion](https://admin.rpmfusion.org/pkgdb/package/free/ayugram-desktop/).
-
-```bash
-dnf install ayugram-desktop
-```
-
-### Любой другой Линукс дистрибутив
-
-Flatpak: https://github.com/0FL01/AyuGramDesktop-flatpak
-
-Или следуйте [официальному руководству](https://github.com/AyuGram/AyuGramDesktop/blob/dev/docs/building-linux.md).
-
-## Пожертвования
-
-Вам нравится использовать **AyuGram**? Оставьте нам чаевые!
-
-[Здесь доступные варианты.](https://docs.ayugram.one/donate/)
-
-## Использованные материалы
-
-### Телеграм клиенты
-
-- [Telegram Desktop](https://github.com/telegramdesktop/tdesktop)
-- [Kotatogram](https://github.com/kotatogram/kotatogram-desktop)
-- [64Gram](https://github.com/TDesktop-x64/tdesktop)
-- [Forkgram](https://github.com/forkgram/tdesktop)
-
-### Использованные библиотеки
-
-- [JSON for Modern C++](https://github.com/nlohmann/json)
-- [SQLite](https://github.com/sqlite/sqlite)
-- [sqlite_orm](https://github.com/fnc12/sqlite_orm)
-
-### Иконки
-
-- [Solar Icon Set](https://www.figma.com/community/file/1166831539721848736)
-
-### Боты
-
-- [TelegramDB](https://t.me/tgdatabase) для получения юзернейма по ID (до закрытия бесплатной версии 2 апреля 2026)
+Распространяется по свободной лицензии **[GNU General Public License v3.0](LICENSE)**.
