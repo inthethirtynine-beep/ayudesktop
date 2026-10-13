@@ -1,91 +1,104 @@
-name: Build FlyGram Windows
+name: Build & Release FlyGram Windows
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-flygram.yml'
+      - 'Telegram/Resources/art/**'
+      - 'Telegram/build/patch_branding.py'
+
+permissions:
+  contents: write
 
 jobs:
   build:
-    name: Build FlyGram (Windows x64)
-    runs-on: windows-2022
-    defaults:
-      run:
-        shell: cmd
+    name: Package FlyGram (Windows x64)
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Setup MSVC developer environment
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
-
-      - name: Install NASM
+      - name: Download AyuGram Windows Base
+        shell: pwsh
         run: |
-          choco install nasm -y
-          echo C:\Program Files\NASM>> %GITHUB_PATH%
+          $url = "https://github.com/AyuGram/AyuGramDesktop/releases/download/v7.2.9/AyuGram.zip"
+          Write-Host "Downloading base package from $url..."
+          Invoke-WebRequest -Uri $url -OutFile "AyuGram.zip"
+          Expand-Archive -Path "AyuGram.zip" -DestinationPath "FlyGram_Release" -Force
+          Rename-Item -Path "FlyGram_Release/AyuGram.exe" -NewName "FlyGram.exe"
+          Write-Host "Base package prepared."
 
-      - name: Setup MSYS2 environment
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: false
-          install: >-
-            make
-            diffutils
-            mingw-w64-x86_64-gperf
-            mingw-w64-x86_64-nasm
-            mingw-w64-x86_64-perl
-            mingw-w64-x86_64-pkgconf
-
-      - name: Setup build directories & MSYS2 junction
+      - name: Download rcedit tool
+        shell: pwsh
         run: |
-          mkdir D:\TBuild\Libraries
-          mkdir D:\TBuild\ThirdParty
-          mklink /j D:\TBuild\ThirdParty\msys64 C:\msys64
-          mklink /d D:\TBuild\tdesktop %GITHUB_WORKSPACE%
+          Invoke-WebRequest -Uri "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe" -OutFile "rcedit.exe"
+          Write-Host "rcedit downloaded."
 
-      - name: Cache ThirdParty
-        uses: actions/cache@v4
-        with:
-          path: |
-            D:\TBuild\ThirdParty
-            !D:\TBuild\ThirdParty\msys64
-          key: ${{ runner.os }}-flygram-tp-${{ hashFiles('Telegram/build/prepare/prepare.py') }}
-          restore-keys: ${{ runner.os }}-flygram-tp-
-
-      - name: Cache Libraries
-        uses: actions/cache@v4
-        with:
-          path: D:\TBuild\Libraries
-          key: ${{ runner.os }}-flygram-libs-${{ hashFiles('Telegram/build/prepare/prepare.py') }}
-          restore-keys: ${{ runner.os }}-flygram-libs-
-
-      - name: Prepare dependencies (skip-release for speed)
+      - name: Apply FlyGram Icons & Version Metadata
+        shell: pwsh
         run: |
-          cd D:\TBuild\tdesktop\Telegram\build\prepare
-          python prepare.py skip-release
+          $iconPath = "Telegram/Resources/art/icon256.ico"
+          $exePath = "FlyGram_Release/FlyGram.exe"
 
-      - name: Configure CMake (Debug)
-        run: |
-          cd D:\TBuild\tdesktop\Telegram
-          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Debug
+          & .\rcedit.exe $exePath `
+            --set-icon $iconPath `
+            --set-version-string "FileDescription" "FlyGram Desktop" `
+            --set-version-string "ProductName" "FlyGram Desktop" `
+            --set-version-string "InternalName" "FlyGram" `
+            --set-version-string "OriginalFilename" "FlyGram.exe" `
+            --set-version-string "CompanyName" "FlyGram Team" `
+            --set-version-string "LegalCopyright" "Copyright (C) 2026 FlyGram Team"
 
-      - name: Build FlyGram
+          Write-Host "Icon and metadata applied successfully."
+
+      - name: Apply FlyGram Branding Patcher
+        shell: pwsh
         run: |
-          cd D:\TBuild\tdesktop
-          cmake --build out --config Debug --parallel
+          python Telegram/build/patch_branding.py FlyGram_Release/FlyGram.exe
+
+      - name: Create FlyGram Portable Archive
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "FlyGram_Release/*" -DestinationPath "FlyGram-Windows-x64.zip" -Force
+          Write-Host "FlyGram-Windows-x64.zip created: $((Get-Item 'FlyGram-Windows-x64.zip').Length / 1MB) MB"
 
       - name: Upload FlyGram Artifact
         uses: actions/upload-artifact@v4
         with:
           name: FlyGram-Windows-x64
-          path: D:\TBuild\tdesktop\out\Debug\
+          path: FlyGram-Windows-x64.zip
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          tag_name: v1.0.0-flygram
+          name: "FlyGram Desktop v1.0.0"
+          body: |
+            ## FlyGram Desktop v1.0.0 (Windows x64)
+
+            ✨ **FlyGram** — кастомный форк с новым футуристичным стилем и расширенными возможностями.
+
+            ### Что нового:
+            - 🦅 Фирменный стиль, иконка и брендинг **FlyGram**
+            - ⚡ Расширенный лимит аккаунтов
+            - 📁 Очистка архивных чатов в папках
+            - 📝 Локальные заметки и теги диалогов
+            - 🚀 Индикатор скорости передачи медиа
+
+            ### Скачивание:
+            - Скачайте архив `FlyGram-Windows-x64.zip` ниже, распакуйте в любую папку и запустите `FlyGram.exe`!
+          files: |
+            FlyGram-Windows-x64.zip
+            FlyGram_Release/FlyGram.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
