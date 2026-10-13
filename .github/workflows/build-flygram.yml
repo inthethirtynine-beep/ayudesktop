@@ -28,17 +28,25 @@ jobs:
         with:
           arch: x64
 
+      - name: Setup MSYS2 environment
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: false
+          install: >-
+            make
+            diffutils
+            mingw-w64-x86_64-gperf
+            mingw-w64-x86_64-nasm
+            mingw-w64-x86_64-perl
+            mingw-w64-x86_64-pkgconf
+
       - name: Setup build directories & MSYS2 junction
         run: |
           mkdir D:\TBuild\Libraries
           mkdir D:\TBuild\ThirdParty
           mklink /j D:\TBuild\ThirdParty\msys64 C:\msys64
           mklink /d D:\TBuild\tdesktop %GITHUB_WORKSPACE%
-
-      - name: Pre-install required MSYS2 packages
-        shell: bash
-        run: |
-          /c/msys64/usr/bin/pacman -S --noconfirm --needed make mingw-w64-x86_64-diffutils mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm mingw-w64-x86_64-perl mingw-w64-x86_64-pkgconf
 
       - name: Cache Libraries and Tools
         uses: actions/cache@v4
