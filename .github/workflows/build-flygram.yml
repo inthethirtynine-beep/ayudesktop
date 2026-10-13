@@ -1,0 +1,58 @@
+name: Build FlyGram Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build FlyGram (Windows x64)
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Setup MSVC developer environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Setup build directories
+        run: |
+          mkdir D:\TBuild\Libraries
+          mkdir D:\TBuild\ThirdParty
+          mklink /d D:\TBuild\tdesktop %GITHUB_WORKSPACE%
+
+      - name: Prepare dependencies
+        run: |
+          cd D:\TBuild\tdesktop\Telegram\build\prepare
+          python prepare.py silent
+
+      - name: Configure CMake
+        run: |
+          cd D:\TBuild\tdesktop\Telegram
+          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release
+
+      - name: Build FlyGram
+        run: |
+          cd D:\TBuild\tdesktop
+          cmake --build out --config Release --parallel
+
+      - name: Upload FlyGram.exe Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlyGram-Windows-x64
+          path: |
+            D:\TBuild\tdesktop\out\Release\FlyGram.exe
+            D:\TBuild\tdesktop\out\Release\Telegram.exe
