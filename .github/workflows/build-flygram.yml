@@ -28,13 +28,10 @@ jobs:
         with:
           arch: x64
 
-      - name: Install NASM and configure PATH
+      - name: Install NASM
         run: |
           choco install nasm -y
           echo C:\Program Files\NASM>> %GITHUB_PATH%
-          echo C:\ProgramData\chocolatey\bin>> %GITHUB_PATH%
-          echo C:\msys64\mingw64\bin>> %GITHUB_PATH%
-          echo C:\msys64\usr\bin>> %GITHUB_PATH%
 
       - name: Setup MSYS2 environment
         uses: msys2/setup-msys2@v2
@@ -56,36 +53,39 @@ jobs:
           mklink /j D:\TBuild\ThirdParty\msys64 C:\msys64
           mklink /d D:\TBuild\tdesktop %GITHUB_WORKSPACE%
 
-      - name: Cache Libraries and Tools
+      - name: Cache ThirdParty
         uses: actions/cache@v4
         with:
           path: |
             D:\TBuild\ThirdParty
             !D:\TBuild\ThirdParty\msys64
-            D:\TBuild\Libraries
-          key: ${{ runner.os }}-flygram-libs-${{ hashFiles('Telegram/build/prepare/prepare.py') }}
-          restore-keys: |
-            ${{ runner.os }}-flygram-libs-
+          key: ${{ runner.os }}-flygram-tp-${{ hashFiles('Telegram/build/prepare/prepare.py') }}
+          restore-keys: ${{ runner.os }}-flygram-tp-
 
-      - name: Prepare dependencies
+      - name: Cache Libraries
+        uses: actions/cache@v4
+        with:
+          path: D:\TBuild\Libraries
+          key: ${{ runner.os }}-flygram-libs-${{ hashFiles('Telegram/build/prepare/prepare.py') }}
+          restore-keys: ${{ runner.os }}-flygram-libs-
+
+      - name: Prepare dependencies (skip-release for speed)
         run: |
           cd D:\TBuild\tdesktop\Telegram\build\prepare
-          python prepare.py silent
+          python prepare.py skip-release
 
-      - name: Configure CMake
+      - name: Configure CMake (Debug)
         run: |
           cd D:\TBuild\tdesktop\Telegram
-          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release
+          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Debug
 
       - name: Build FlyGram
         run: |
           cd D:\TBuild\tdesktop
-          cmake --build out --config Release --parallel
+          cmake --build out --config Debug --parallel
 
-      - name: Upload FlyGram.exe Artifact
+      - name: Upload FlyGram Artifact
         uses: actions/upload-artifact@v4
         with:
           name: FlyGram-Windows-x64
-          path: |
-            D:\TBuild\tdesktop\out\Release\FlyGram.exe
-            D:\TBuild\tdesktop\out\Release\Telegram.exe
+          path: D:\TBuild\tdesktop\out\Debug\
