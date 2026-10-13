@@ -16,6 +16,8 @@
 #include "ayu/features/filters/filters_controller.h"
 #include "ayu/features/forward/ayu_forward.h"
 #include "ayu/features/forward/ayu_forward_rich.h"
+#include "ayu/features/user_notes/ayu_user_notes.h"
+#include "ayu/features/user_notes/edit_user_note_box.h"
 #include "ayu/ui/context_menu/menu_item_subtext.h"
 #include "ayu/ui/message_history/history_section.h"
 #include "ayu/ui/settings/filters/edit_filter.h"
@@ -484,6 +486,23 @@ void AddDeleteOwnMessagesAction(PeerData *peerData,
 		tr::ayu_DeleteOwnMessages(tr::now),
 		DeleteMyMessagesHandler(sessionController, peerData),
 		&st::menuIconTTL);
+}
+
+void AddUserNotesAction(
+		PeerData *peerData,
+		not_null<Window::SessionController*> sessionController,
+		const Window::PeerMenuCallback &addCallback) {
+	if (!peerData) {
+		return;
+	}
+	const auto hasNote = AyuFeatures::UserNotes::getInstance().has(peerData->id);
+	addCallback(Window::PeerMenuCallback::Args{
+		.text = hasNote ? u"Редактировать заметку"_q : u"Добавить заметку"_q,
+		.handler = [=] {
+			sessionController->show(Box(AyuFeatures::EditUserNoteBox, sessionController, peerData));
+		},
+		.icon = &st::menuIconEdit,
+	});
 }
 
 void AddHistoryAction(not_null<Ui::PopupMenu*> menu, HistoryItem *item) {

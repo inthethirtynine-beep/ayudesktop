@@ -1,0 +1,8 @@
+# Project-level configuration for OpenAI Codex in AyuGram Desktop
+
+# Порог срабатывания автоматического сжатия контекста (в токенах)
+# Увеличен для предотвращения частой потери контекста при работе с крупной кодовой базой
+model_auto_compact_token_limit = 180000
+
+# Лимит на размер документов проекта (AGENTS.md), загружаемых в контекст
+project_doc_max_bytes = 32768

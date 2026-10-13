@@ -8914,6 +8914,13 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "ayu_RemoveMessageTail" = "Remove Message Tail";
 "ayu_HideShareButton" = "Hide Side \"Share\" Button";
 "ayu_ChatFoldersHeader" = "Chat Folders";
+"ayu_ExcludeArchivedFromFolders" = "Exclude Archived Chats from Folders";
+"ayu_CleanArchiveFromFolders" = "Clean All Folders from Archived Chats";
+"ayu_CleanArchiveFromFoldersBoxText" = "This will remove all archived chats from the included chats lists and enable the \"Exclude Archived\" filter for all your folders on Telegram servers. Proceed?";
+"ayu_CleanArchiveFromFoldersDone" = "Folders successfully cleaned from archived chats!";
+"ayu_CleanArchiveFromFoldersNone" = "No archived chats found in your folders.";
+"ayu_CleanArchiveFromFolder" = "Clean Folder from Archive";
+"ayu_CleanArchiveFromFolderDone" = "Folder successfully cleaned from archived chats!";
 "ayu_SettingsContextMenuTitle" = "Choose when to show the item";
 "ayu_SettingsContextMenuDescription" = "Extended menu items will be displayed if you hold CTRL or SHIFT while right-clicking on the message.";
 "ayu_SettingsContextMenuItemHidden" = "Hidden";

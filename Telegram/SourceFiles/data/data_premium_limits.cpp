@@ -89,15 +89,13 @@ int PremiumLimits::dialogShareableFiltersCurrent() const {
 }
 
 int PremiumLimits::dialogFiltersChatsDefault() const {
-	return appConfigLimit("dialog_filters_chats_limit_default", 100);
+	return 10000;
 }
 int PremiumLimits::dialogFiltersChatsPremium() const {
-	return appConfigLimit("dialog_filters_chats_limit_premium", 200);
+	return 10000;
 }
 int PremiumLimits::dialogFiltersChatsCurrent() const {
-	return isPremium()
-		? dialogFiltersChatsPremium()
-		: dialogFiltersChatsDefault();
+	return 10000;
 }
 
 int PremiumLimits::dialogFiltersLinksDefault() const {

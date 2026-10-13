@@ -108,6 +108,12 @@ PRIVATE
 )
 
 set(ayugram_files
+        ayu/features/folders/ayu_folders_cleaner.cpp
+        ayu/features/folders/ayu_folders_cleaner.h
+        ayu/features/user_notes/ayu_user_notes.cpp
+        ayu/features/user_notes/ayu_user_notes.h
+        ayu/features/user_notes/edit_user_note_box.cpp
+        ayu/features/user_notes/edit_user_note_box.h
         ayu/ayu_worker.cpp
         ayu/ayu_worker.h
         ayu/ayu_url_handlers.cpp

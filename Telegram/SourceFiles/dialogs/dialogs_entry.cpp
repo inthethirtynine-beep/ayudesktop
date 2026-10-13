@@ -7,6 +7,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "dialogs/dialogs_entry.h"
 
+#include "ayu/features/user_notes/ayu_user_notes.h"
 #include "dialogs/dialogs_key.h"
 #include "dialogs/dialogs_indexed_list.h"
 #include "base/options.h"
@@ -332,9 +333,16 @@ const Ui::Text::String &Entry::chatListNameText() const {
 	const auto version = chatListNameVersion();
 	if (_chatListNameVersion < version) {
 		_chatListNameVersion = version;
+		auto name = chatListName();
+		if (const auto history = asHistory()) {
+			const auto tag = AyuFeatures::UserNotes::getInstance().tag(history->peer->id);
+			if (!tag.isEmpty()) {
+				name += u" ["_q + tag + u"]"_q;
+			}
+		}
 		_chatListNameText.setText(
 			st::semiboldTextStyle,
-			chatListName(),
+			name,
 			Ui::NameTextOptions());
 	}
 	return _chatListNameText;

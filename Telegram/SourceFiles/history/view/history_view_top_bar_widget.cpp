@@ -74,6 +74,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 // AyuGram includes
 #include "ayu/ayu_settings.h"
+#include "ayu/features/user_notes/ayu_user_notes.h"
 #include "boxes/peers/edit_participants_box.h"
 #include "data/data_chat_filters.h"
 #include "history/admin_log/history_admin_log_section.h"
@@ -104,7 +105,9 @@ QString TopBarNameText(
 			return tr::lng_hidden_author_messages(tr::now);
 		}
 	}
-	return peer->topBarNameText();
+	const auto base = peer->topBarNameText();
+	const auto tag = AyuFeatures::UserNotes::getInstance().tag(peer->id);
+	return tag.isEmpty() ? base : (base + u" ["_q + tag + u"]"_q);
 }
 
 } // namespace
@@ -252,6 +255,7 @@ TopBarWidget::TopBarWidget(
 	) | rpl::on_next([=](const Data::PeerUpdate &update) {
 		if ((update.flags & UpdateFlag::Name)
 			&& (update.peer == titleNamePeer())) {
+			_titleNameVersion = 0;
 			TopBarWidget::update();
 		}
 		if (update.flags & UpdateFlag::HasCalls) {
@@ -262,7 +266,7 @@ TopBarWidget::TopBarWidget(
 			}
 		} else if ((update.flags & UpdateFlag::Rights)
 			&& (_activeChat.key.peer() == update.peer)) {
-			updateControlsVisibility();
+				updateControlsVisibility();
 		}
 		if ((update.flags & UpdateFlag::OnlineStatus)
 			&& trackOnlineOf(update.peer)) {
@@ -277,6 +281,14 @@ TopBarWidget::TopBarWidget(
 		if ((update.flags & UpdateFlag::EmojiStatus)
 			&& (_activeChat.key.peer() == update.peer)) {
 			this->update();
+		}
+	}, lifetime());
+
+	AyuFeatures::UserNotes::getInstance().noteChanged(
+	) | rpl::on_next([=](PeerId peerId) {
+		if (const auto p = titleNamePeer(); p && p->id == peerId) {
+			_titleNameVersion = 0;
+			update();
 		}
 	}, lifetime());
 

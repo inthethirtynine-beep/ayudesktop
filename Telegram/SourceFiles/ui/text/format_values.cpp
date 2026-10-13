@@ -10,8 +10,12 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "base/unixtime.h"
 #include "lang/lang_keys.h"
 #include "countries/countries_instance.h"
+#include "ayu/ayu_settings.h"
 
+#include <crl/crl_time.h>
 #include <QtCore/QLocale>
+#include <deque>
+#include <mutex>
 #include <locale>
 #include <sstream>
 #include <iostream>
@@ -20,6 +24,102 @@ namespace Ui {
 namespace {
 
 constexpr auto kSecondsInYear = 365 * 24 * 60 * 60; // 31536000
+
+struct SpeedTrackerEntry {
+	struct Sample {
+		crl::time time = 0;
+		qint64 ready = 0;
+	};
+	std::deque<Sample> samples;
+	crl::time lastTime = 0;
+	qint64 lastReady = 0;
+	qint64 currentSpeed = 0;
+};
+
+std::mutex gSpeedTrackersMutex;
+base::flat_map<qint64, SpeedTrackerEntry> gSpeedTrackers;
+
+[[nodiscard]] QString FormatSpeedString(qint64 bytesPerSec) {
+	if (bytesPerSec >= 1024 * 1024) {
+		const auto tenths = (bytesPerSec * 10) / (1024 * 1024);
+		return QString::number(tenths / 10) + '.' + QString::number(tenths % 10) + u" MB/s"_q;
+	} else if (bytesPerSec >= 1024) {
+		const auto tenths = (bytesPerSec * 10) / 1024;
+		return QString::number(tenths / 10) + '.' + QString::number(tenths % 10) + u" KB/s"_q;
+	} else if (bytesPerSec > 0) {
+		return QString::number(bytesPerSec) + u" B/s"_q;
+	}
+	return QString();
+}
+
+[[nodiscard]] QString CalculateAndFormatSpeed(qint64 ready, qint64 total) {
+	if (!AyuSettings::getInstance().showTransferSpeed()) {
+		return QString();
+	}
+	if (ready <= 0 || ready >= total || total <= 0) {
+		if (ready >= total && total > 0) {
+			const auto lock = std::lock_guard(gSpeedTrackersMutex);
+			gSpeedTrackers.erase(total);
+		}
+		return QString();
+	}
+
+	const auto now = crl::now();
+	const auto lock = std::lock_guard(gSpeedTrackersMutex);
+
+	if (gSpeedTrackers.size() > 30) {
+		for (auto it = gSpeedTrackers.begin(); it != gSpeedTrackers.end();) {
+			if (now - it->second.lastTime > 10000) {
+				it = gSpeedTrackers.erase(it);
+			} else {
+				++it;
+			}
+		}
+	}
+
+	auto it = gSpeedTrackers.find(total);
+	if (it == gSpeedTrackers.end()) {
+		SpeedTrackerEntry entry;
+		entry.samples.push_back({ now, ready });
+		entry.lastTime = now;
+		entry.lastReady = ready;
+		entry.currentSpeed = 0;
+		gSpeedTrackers.emplace(total, std::move(entry));
+		return QString();
+	}
+
+	auto &entry = it->second;
+	if (now - entry.lastTime > 5000 || ready < entry.lastReady) {
+		entry.samples.clear();
+		entry.samples.push_back({ now, ready });
+		entry.lastTime = now;
+		entry.lastReady = ready;
+		entry.currentSpeed = 0;
+		return QString();
+	}
+
+	if (ready > entry.lastReady || (now - entry.lastTime >= 250)) {
+		entry.samples.push_back({ now, ready });
+		entry.lastTime = now;
+		entry.lastReady = ready;
+
+		while (entry.samples.size() > 1 && (now - entry.samples.front().time > 1500)) {
+			entry.samples.pop_front();
+		}
+
+		if (entry.samples.size() >= 2) {
+			const auto dt = entry.samples.back().time - entry.samples.front().time;
+			const auto dr = entry.samples.back().ready - entry.samples.front().ready;
+			if (dt >= 200 && dr >= 0) {
+				entry.currentSpeed = (dr * 1000LL) / dt;
+			}
+		}
+	} else if (now - entry.lastTime > 2500) {
+		entry.currentSpeed = 0;
+	}
+
+	return FormatSpeedString(entry.currentSpeed);
+}
 
 [[nodiscard]] QString FormatTextWithReadyAndTotal(
 		tr::phrase<lngtag_ready, lngtag_total, lngtag_mb> phrase,
@@ -46,7 +146,12 @@ constexpr auto kSecondsInYear = 365 * 24 * 60 * 60; // 31536000
 		totalStr = QString::number(total);
 		mb = u"B"_q;
 	}
-	return phrase(tr::now, lt_ready, readyStr, lt_total, totalStr, lt_mb, mb);
+	auto result = phrase(tr::now, lt_ready, readyStr, lt_total, totalStr, lt_mb, mb);
+	const auto speed = CalculateAndFormatSpeed(ready, total);
+	if (!speed.isEmpty()) {
+		result += u" ("_q + speed + u")"_q;
+	}
+	return result;
 }
 
 } // namespace

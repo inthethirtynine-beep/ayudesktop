@@ -366,6 +366,11 @@ bool ChatFilter::contains(
 	if (_never.contains(history)) {
 		return false;
 	}
+	if (AyuSettings::getInstance().excludeArchivedFromFolders()
+		&& history->folderKnown()
+		&& history->folder()) {
+		return false;
+	}
 	const auto channel = history->peer->asChannel();
 	if (channel && channel->isCommunity()) {
 		// A community never matches a filter by chat type (it is neither a
@@ -416,6 +421,13 @@ ChatFilters::ChatFilters(not_null<Session*> owner)
 				_list.insert(begin(_list), ChatFilter());
 				_listChanged.fire({});
 			}
+		}
+	}, _lifetime);
+
+	AyuSettings::getInstance().excludeArchivedFromFoldersChanges()
+	| rpl::on_next([=] {
+		if (_loaded) {
+			_listChanged.fire({});
 		}
 	}, _lifetime);
 }

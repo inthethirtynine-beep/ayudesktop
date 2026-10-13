@@ -43,6 +43,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "settings/sections/settings_folders.h"
 #include "storage/storage_media_prepare.h"
 #include "api/api_chat_filters.h"
+#include "ayu/features/folders/ayu_folders_cleaner.h"
 #include "apiwrap.h"
 #include "styles/style_widgets.h"
 #include "styles/style_window.h"
@@ -798,6 +799,14 @@ void FiltersMenu::showMenu(QPoint position, FilterId id) {
 			addAction);
 
 		addAction({
+			.text = tr::ayu_CleanArchiveFromFolder(tr::now),
+			.handler = crl::guard(&_outer, [=, this] {
+				Ayu::Folders::CleanFolderFromArchive(_session, id);
+			}),
+			.icon = &st::menuIconArchive,
+		});
+
+		addAction({
 			.text = tr::lng_filters_context_remove(tr::now),
 			.handler = crl::guard(&_outer, [=, this] {
 				_removeApi.request(base::make_weak(&_outer), _session, id);
@@ -811,6 +820,14 @@ void FiltersMenu::showMenu(QPoint position, FilterId id) {
 			MarkAsReadMenu::ChatListKind::AllChats,
 			[=] { return _session->session().data().chatsList(); },
 			addAction);
+
+		addAction({
+			.text = tr::ayu_CleanArchiveFromFolders(tr::now),
+			.handler = crl::guard(&_outer, [=, this] {
+				Ayu::Folders::CleanAllFoldersFromArchive(_session);
+			}),
+			.icon = &st::menuIconArchive,
+		});
 
 		addAction(
 			tr::lng_filters_setup_menu(tr::now),

@@ -335,11 +335,13 @@ public:
 	[[nodiscard]] bool hideNotificationCounters() const { return _hideNotificationCounters.current(); }
 	[[nodiscard]] bool hideNotificationBadge() const { return _hideNotificationBadge.current(); }
 	[[nodiscard]] bool hideAllChatsFolder() const { return _hideAllChatsFolder.current(); }
+	[[nodiscard]] bool excludeArchivedFromFolders() const { return _excludeArchivedFromFolders.current(); }
 	[[nodiscard]] ChannelBottomButton channelBottomButton() const { return _channelBottomButton.current(); }
 	[[nodiscard]] bool quickAdminShortcuts() const { return _quickAdminShortcuts.current(); }
 	[[nodiscard]] bool disableGreetingSticker() const { return _disableGreetingSticker.current(); }
 	[[nodiscard]] PeerIdDisplay showPeerId() const { return _showPeerId.current(); }
 	[[nodiscard]] bool showMessageSeconds() const { return _showMessageSeconds.current(); }
+	[[nodiscard]] bool showTransferSpeed() const { return _showTransferSpeed.current(); }
 	[[nodiscard]] bool showMessageShot() const { return _showMessageShot.current(); }
 	[[nodiscard]] bool filterZalgo() const { return _filterZalgo.current(); }
 	[[nodiscard]] bool stickerConfirmation() const { return _stickerConfirmation.current(); }
@@ -422,6 +424,7 @@ public:
 	void setHideNotificationCounters(bool val);
 	void setHideNotificationBadge(bool val);
 	void setHideAllChatsFolder(bool val);
+	void setExcludeArchivedFromFolders(bool val);
 	void setChannelBottomButton(ChannelBottomButton val);
 	void setQuickAdminShortcuts(bool val);
 	void setDisableGreetingSticker(bool val);
@@ -440,6 +443,7 @@ public:
 	void setAvatarCorners(int val);
 	void setSingleCornerRadius(bool val);
 	void setStreamerMode(bool val);
+	void setShowTransferSpeed(bool val);
 
 	[[nodiscard]] rpl::producer<bool> useGlobalGhostModeValue() const { return _useGlobalGhostMode.value(); }
 	[[nodiscard]] rpl::producer<bool> useGlobalGhostModeChanges() const { return _useGlobalGhostMode.changes(); }
@@ -579,6 +583,8 @@ public:
 	[[nodiscard]] rpl::producer<bool> hideNotificationBadgeChanges() const { return _hideNotificationBadge.changes(); }
 	[[nodiscard]] rpl::producer<bool> hideAllChatsFolderValue() const { return _hideAllChatsFolder.value(); }
 	[[nodiscard]] rpl::producer<bool> hideAllChatsFolderChanges() const { return _hideAllChatsFolder.changes(); }
+	[[nodiscard]] rpl::producer<bool> excludeArchivedFromFoldersValue() const { return _excludeArchivedFromFolders.value(); }
+	[[nodiscard]] rpl::producer<bool> excludeArchivedFromFoldersChanges() const { return _excludeArchivedFromFolders.changes(); }
 	[[nodiscard]] rpl::producer<ChannelBottomButton> channelBottomButtonValue() const { return _channelBottomButton.value(); }
 	[[nodiscard]] rpl::producer<ChannelBottomButton> channelBottomButtonChanges() const { return _channelBottomButton.changes(); }
 	[[nodiscard]] rpl::producer<bool> quickAdminShortcutsValue() const { return _quickAdminShortcuts.value(); }
@@ -589,6 +595,8 @@ public:
 	[[nodiscard]] rpl::producer<PeerIdDisplay> showPeerIdChanges() const { return _showPeerId.changes(); }
 	[[nodiscard]] rpl::producer<bool> showMessageSecondsValue() const { return _showMessageSeconds.value(); }
 	[[nodiscard]] rpl::producer<bool> showMessageSecondsChanges() const { return _showMessageSeconds.changes(); }
+	[[nodiscard]] rpl::producer<bool> showTransferSpeedValue() const { return _showTransferSpeed.value(); }
+	[[nodiscard]] rpl::producer<bool> showTransferSpeedChanges() const { return _showTransferSpeed.changes(); }
 	[[nodiscard]] rpl::producer<bool> showMessageShotValue() const { return _showMessageShot.value(); }
 	[[nodiscard]] rpl::producer<bool> showMessageShotChanges() const { return _showMessageShot.changes(); }
 	[[nodiscard]] rpl::producer<bool> filterZalgoValue() const { return _filterZalgo.value(); }
@@ -693,6 +701,7 @@ private:
 	rpl::variable<bool> _hideNotificationCounters = false;
 	rpl::variable<bool> _hideNotificationBadge = false;
 	rpl::variable<bool> _hideAllChatsFolder = false;
+	rpl::variable<bool> _excludeArchivedFromFolders = false;
 	rpl::variable<ChannelBottomButton> _channelBottomButton = ChannelBottomButton::DiscussWithFallback;
 	rpl::variable<bool> _quickAdminShortcuts = true;
 	rpl::variable<bool> _disableGreetingSticker = false;
@@ -711,6 +720,7 @@ private:
 	rpl::variable<int> _avatarCorners = 23;
 	rpl::variable<bool> _singleCornerRadius = false;
 	rpl::variable<bool> _streamerMode = false;
+	rpl::variable<bool> _showTransferSpeed = true;
 
 	rpl::variable<bool> _useGlobalGhostMode = true;
 	std::map<uint64, std::unique_ptr<GhostModeAccountSettings>> _ghostAccounts;

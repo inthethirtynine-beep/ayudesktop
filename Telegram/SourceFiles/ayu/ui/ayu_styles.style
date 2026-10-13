@@ -88,6 +88,16 @@ registrationDateImportantTooltipLabel: FlatLabel(defaultImportantTooltipLabel) {
 	}
 }
 
+infoProfileLabeledButtonEditNote: IconButton(defaultIconButton) {
+	width: 34px;
+	height: 34px;
+	icon: icon {{ "info/info_edit", windowActiveTextFg }};
+	iconOver: icon {{ "info/info_edit", windowActiveTextFg }};
+	rippleAreaPosition: point(0px, 0px);
+	rippleAreaSize: 34px;
+	ripple: defaultRippleAnimation;
+}
+
 pluginShowInFolderIcon: icon {{ "menu/show_in_folder", boxTitleCloseFg }};
 pluginShowInFolderIconOver: icon {{ "menu/show_in_folder", boxTitleCloseFgOver }};
 pluginShowInFolder: IconButton(defaultIconButton) {

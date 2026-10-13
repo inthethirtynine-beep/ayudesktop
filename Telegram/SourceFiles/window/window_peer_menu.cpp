@@ -425,6 +425,9 @@ bool PinnedLimitReached(
 		not_null<Window::SessionController*> controller,
 		not_null<History*> history,
 		FilterId filterId) {
+	if (filterId != 0) {
+		return false;
+	}
 	const auto owner = &history->owner();
 	if (owner->pinnedCanPin(filterId, history)) {
 		return false;
@@ -1921,6 +1924,7 @@ void Filler::fillContextMenuActions() {
 	}
 	addBanFromChannel();
 	addClearHistory();
+	AyuUi::AddUserNotesAction(_peer, _controller, _addAction);
 	AyuUi::AddDeleteOwnMessagesAction(_peer, _topic, _controller, _addAction);
 	addDeleteChat();
 	addLeaveChat();
@@ -1930,6 +1934,7 @@ void Filler::fillContextMenuActions() {
 void Filler::fillHistoryActions() {
 	addToggleMuteSubmenu(true);
 	AyuUi::AddAyuGramActions(_peer, _thread, _controller, _addAction);
+	AyuUi::AddUserNotesAction(_peer, _controller, _addAction);
 	addCreateTopic();
 	addInfo();
 	AyuUi::AddJumpToBeginningAction(_peer, _thread, _controller, _addAction);
@@ -1960,6 +1965,7 @@ void Filler::fillProfileActions() {
 	addNewContact();
 	addShareContact();
 	addEditContact();
+	AyuUi::AddUserNotesAction(_peer, _controller, _addAction);
 	addBotToGroup();
 	addNewMembers();
 	addSendGift();

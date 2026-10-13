@@ -7,6 +7,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "history/history.h"
 
+#include "ayu/features/user_notes/ayu_user_notes.h"
 #include "history/view/history_view_element.h"
 #include "history/view/history_view_item_preview.h"
 #include "history/view/history_view_translate_tracker.h"
@@ -2546,7 +2547,7 @@ bool History::isLinkedCommunityMember() const {
 }
 
 int History::chatListNameVersion() const {
-	return peer->nameVersion();
+	return peer->nameVersion() + AyuFeatures::UserNotes::getInstance().version(peer->id);
 }
 
 void History::hasUnreadMentionChanged(bool has) {

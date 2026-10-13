@@ -951,6 +951,12 @@ void AyuSettings::setHideAllChatsFolder(bool val) {
 	save();
 }
 
+void AyuSettings::setExcludeArchivedFromFolders(bool val) {
+	if (_excludeArchivedFromFolders.current() == val) return;
+	_excludeArchivedFromFolders = val;
+	save();
+}
+
 void AyuSettings::setChannelBottomButton(ChannelBottomButton val) {
 	if (_channelBottomButton.current() == val) return;
 	_channelBottomButton = val;
@@ -1069,6 +1075,12 @@ void AyuSettings::setStreamerMode(bool val) {
 	save();
 }
 
+void AyuSettings::setShowTransferSpeed(bool val) {
+	if (_showTransferSpeed.current() == val) return;
+	_showTransferSpeed = val;
+	save();
+}
+
 void to_json(nlohmann::json &j, const AyuSettings &s) {
 	auto ghostAccounts = nlohmann::json::object();
 	for (const auto &[key, value] : s._ghostAccounts) {
@@ -1147,6 +1159,7 @@ void to_json(nlohmann::json &j, const AyuSettings &s) {
 		{"hideNotificationCounters", s._hideNotificationCounters.current()},
 		{"hideNotificationBadge", s._hideNotificationBadge.current()},
 		{"hideAllChatsFolder", s._hideAllChatsFolder.current()},
+		{"excludeArchivedFromFolders", s._excludeArchivedFromFolders.current()},
 		{"channelBottomButton", s._channelBottomButton.current()},
 		{"quickAdminShortcuts", s._quickAdminShortcuts.current()},
 		{"disableGreetingSticker", s._disableGreetingSticker.current()},
@@ -1165,6 +1178,7 @@ void to_json(nlohmann::json &j, const AyuSettings &s) {
 		{"avatarCorners", s._avatarCorners.current()},
 		{"singleCornerRadius", s._singleCornerRadius.current()},
 		{"streamerMode", s._streamerMode.current()},
+		{"showTransferSpeed", s._showTransferSpeed.current()},
 		{"messageShotSettings", s._messageShotSettings}
 	};
 }
@@ -1251,6 +1265,7 @@ void from_json(const nlohmann::json &j, AyuSettings &s) {
 	s._hideNotificationCounters = j.value("hideNotificationCounters", defaults._hideNotificationCounters.current());
 	s._hideNotificationBadge = j.value("hideNotificationBadge", defaults._hideNotificationBadge.current());
 	s._hideAllChatsFolder = j.value("hideAllChatsFolder", defaults._hideAllChatsFolder.current());
+	s._excludeArchivedFromFolders = j.value("excludeArchivedFromFolders", defaults._excludeArchivedFromFolders.current());
 	s._channelBottomButton = j.value("channelBottomButton", defaults._channelBottomButton.current());
 	s._quickAdminShortcuts = j.value("quickAdminShortcuts", defaults._quickAdminShortcuts.current());
 	s._disableGreetingSticker = j.value("disableGreetingSticker", defaults._disableGreetingSticker.current());
@@ -1269,6 +1284,7 @@ void from_json(const nlohmann::json &j, AyuSettings &s) {
 	s._avatarCorners = j.value("avatarCorners", defaults._avatarCorners.current());
 	s._singleCornerRadius = j.value("singleCornerRadius", defaults._singleCornerRadius.current());
 	s._streamerMode = j.value("streamerMode", defaults._streamerMode.current());
+	s._showTransferSpeed = j.value("showTransferSpeed", defaults._showTransferSpeed.current());
 
 	if (j.contains("messageShotSettings") && j["messageShotSettings"].is_object()) {
 		j["messageShotSettings"].get_to(s._messageShotSettings);

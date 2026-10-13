@@ -2935,11 +2935,7 @@ bool Session::pinnedCanPin(
 		not_null<History*> history) const {
 	Expects(filterId != 0);
 
-	const auto &list = chatsFilters().list();
-	const auto i = ranges::find(list, filterId, &Data::ChatFilter::id);
-	return (i == end(list))
-		|| (i->always().contains(history))
-		|| (i->always().size() < pinnedChatsLimit(filterId));
+	return true;
 }
 
 int Session::pinnedChatsLimit(Data::Folder *folder) const {
@@ -2950,8 +2946,7 @@ int Session::pinnedChatsLimit(Data::Folder *folder) const {
 }
 
 int Session::pinnedChatsLimit(FilterId filterId) const {
-	const auto limits = Data::PremiumLimits(_session);
-	return limits.dialogFiltersChatsCurrent();
+	return 10000;
 }
 
 int Session::pinnedChatsLimit(not_null<Data::Forum*> forum) const {

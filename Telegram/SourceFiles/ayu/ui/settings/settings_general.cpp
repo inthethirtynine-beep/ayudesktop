@@ -269,6 +269,12 @@ void BuildQoLToggles(SectionBuilder &builder, AyuSectionBuilder &ayu) {
 		.getter = &AyuSettings::showMessageSeconds,
 		.setter = &AyuSettings::setShowMessageSeconds,
 	});
+	ayu.addSettingToggle({
+		.id = u"ayu/showTransferSpeed"_q,
+		.title = rpl::single(u"Индикатор скорости скачивания и загрузки"_q),
+		.getter = &AyuSettings::showTransferSpeed,
+		.setter = &AyuSettings::setShowTransferSpeed,
+	});
 
 	BuildShowPeerId(builder);
 

@@ -15,6 +15,8 @@
 #include "ayu/ui/settings/ayu_builder.h"
 #include "ayu/ui/settings/settings_ayu_utils.h"
 #include "ayu/ui/settings/settings_main.h"
+#include "ayu/features/folders/ayu_folders_cleaner.h"
+#include "window/window_session_controller.h"
 #include "inline_bots/bot_attach_web_view.h"
 #include "main/main_session.h"
 #include "settings/settings_builder.h"
@@ -249,6 +251,22 @@ void BuildChatFolders(SectionBuilder &builder, AyuSectionBuilder &ayu) {
 		.getter = &AyuSettings::hideAllChatsFolder,
 		.setter = &AyuSettings::setHideAllChatsFolder,
 	});
+	ayu.addSettingToggle({
+		.id = u"ayu/excludeArchivedFromFolders"_q,
+		.title = tr::ayu_ExcludeArchivedFromFolders(),
+		.getter = &AyuSettings::excludeArchivedFromFolders,
+		.setter = &AyuSettings::setExcludeArchivedFromFolders,
+	});
+
+	if (const auto controller = builder.controller()) {
+		builder.addButton({
+			.id = u"ayu/cleanArchiveFromFolders"_q,
+			.title = tr::ayu_CleanArchiveFromFolders(),
+			.onClick = [=] {
+				Ayu::Folders::CleanAllFoldersFromArchive(controller);
+			},
+		});
+	}
 
 	ayu.addSectionDivider();
 }

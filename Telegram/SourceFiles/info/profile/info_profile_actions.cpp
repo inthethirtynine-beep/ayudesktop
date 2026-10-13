@@ -118,6 +118,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtGui/QClipboard>
 
 // AyuGram includes
+#include "ayu/features/user_notes/ayu_user_notes.h"
+#include "ayu/features/user_notes/edit_user_note_box.h"
 #include "ayu/ui/utils/ayu_profile_values.h"
 #include "ayu/utils/telegram_helpers.h"
 #include "styles/style_ayu_styles.h"
@@ -1999,6 +2001,72 @@ Section DetailsFiller::makeInfo() {
 				return false;
 			});
 			AddRegistrationOrCreationButton(controller, _peer, idInfo, fitLabelToButton);
+
+			auto currentNoteText = [peerId = _peer->id] {
+				const auto current = AyuFeatures::UserNotes::getInstance().get(peerId);
+				QString full;
+				if (!current.tag.isEmpty()) {
+					full += u"["_q + current.tag + u"]"_q;
+				}
+				if (!current.note.isEmpty()) {
+					if (!full.isEmpty()) {
+						full += u"\n"_q;
+					}
+					full += current.note;
+				}
+				return TextWithEntities{ full };
+			};
+
+			auto noteTextProducer = rpl::single(
+				currentNoteText()
+			) | rpl::then(
+				AyuFeatures::UserNotes::getInstance().noteChanged(
+				) | rpl::filter([peerId = _peer->id](PeerId id) {
+					return id == peerId;
+				}) | rpl::map(currentNoteText)
+			);
+
+			const auto noteLine = addInfoLine(
+				rpl::single(u"Локальная заметка"_q),
+				std::move(noteTextProducer));
+
+			const auto editNoteButton = Ui::CreateChild<Ui::IconButton>(
+				noteLine.text->parentWidget(),
+				st::infoProfileLabeledButtonEditNote);
+			editNoteButton->setAccessibleName(u"Редактировать заметку"_q);
+
+			rpl::single(
+				AyuFeatures::UserNotes::getInstance().has(_peer->id)
+			) | rpl::then(
+				AyuFeatures::UserNotes::getInstance().noteChanged(
+				) | rpl::filter([peerId = _peer->id](PeerId id) {
+					return id == peerId;
+				}) | rpl::map([peerId = _peer->id] {
+					return AyuFeatures::UserNotes::getInstance().has(peerId);
+				})
+			) | rpl::on_next([=](bool has) {
+				editNoteButton->setVisible(has);
+			}, editNoteButton->lifetime());
+
+			const auto rightSkip = st::infoProfileLabeledButtonQrRightSkip;
+			fitLabelToButton(editNoteButton, noteLine.text, rightSkip);
+			fitLabelToButton(editNoteButton, noteLine.subtext, rightSkip);
+			editNoteButton->setClickedCallback([=, peer = _peer.get()] {
+				controller->show(Box(
+					AyuFeatures::EditUserNoteBox,
+					controller,
+					peer));
+			});
+
+			noteLine.text->setContextMenuHook([=, peer = _peer.get()](Ui::FlatLabel::ContextMenuRequest request) {
+				request.menu->addAction(u"Редактировать заметку"_q, [=] {
+					controller->show(Box(
+						AyuFeatures::EditUserNoteBox,
+						controller,
+						peer));
+				});
+				noteLine.text->fillContextMenu(request);
+			});
 		}
 
 		if (_topic) {
